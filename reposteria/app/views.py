@@ -1,43 +1,90 @@
-from flask import current_app, render_template
+from flask_appbuilder import ModelView
+from flask_appbuilder.models.sqla.interface import SQLAInterface
+from . import appbuilder
+from .models import Categoria, Ingrediente
 
-"""
-    Create your Model based REST API::
+class CategoriaView(ModelView):
+    datamodel = SQLAInterface(Categoria)
 
-    class MyModelApi(ModelRestApi):
-        datamodel = SQLAInterface(MyModel)
+    label_columns = {
+        "nombre": "Nombre",
+        "descripcion": "Descripcion",
+        "activo": "Activo",
+        "ingredientes": "Ingredientes",
+    }
 
-    appbuilder.add_api(MyModelApi)
+    list_columns = ["nombre", "descripcion", "activo"]
 
+    show_columns = ["id", "nombre", "descripcion", "activo", "ingredientes"]
 
-    Create your Views::
+    add_columns = ["nombre", "descripcion", "activo"]
 
+    edit_columns = ["nombre", "descripcion", "activo"]
 
-    class MyModelView(ModelView):
-        datamodel = SQLAInterface(MyModel)
+    order_columns = ["nombre"]
 
+class IngredienteView(ModelView):
+    datamodel = SQLAInterface(Ingrediente)
 
-    Next, register your Views on create_app Flask factory::
+    label_columns = {
+        "nombre": "Nombre",
+        "categoria": "Categoria",
+        "cantidad": "Cantidad",
+        "unidad_medida": "Unidad de Medida",
+        "costo_unitario": "Costo Unitario",
+        "stock_minimo": "Stock Minimo",
+        "fecha_vencimiento": "Fecha de Vencimiento",
+        "activo": "Activo",
+    }
 
+    list_columns = [
+        "nombre",
+        "categoria",
+        "cantidad",
+        "unidad_medida",
+        "costo_unitario",
+        "stock_minimo",
+        "fecha_vencimiento",
+        "activo",
+    ]
 
-    appbuilder.add_view(
-        MyModelView,
-        "My View",
-        icon="fa-folder-open-o",
-        category="My Category",
-        category_icon='fa-envelope'
-    )
-"""
+    show_columns = [
+        "id",
+        "nombre",
+        "categoria",
+        "cantidad",
+        "unidad_medida",
+        "costo_unitario",
+        "stock_minimo",
+        "fecha_vencimiento",
+        "activo",
+    ]
 
-"""
-    Application wide 404 error handler
-"""
+    add_columns = [
+        "nombre",
+        "categoria",
+        "cantidad",
+        "unidad_medida",
+        "costo_unitario",
+        "stock_minimo",
+        "fecha_vencimiento",
+        "activo",
+    ]
 
+    edit_columns = add_columns
+    search_columns = ["nombre"]
+    order_columns = ["nombre"]
 
-@current_app.errorhandler(404)
-def page_not_found(e):
-    return (
-        render_template(
-            "404.html", base_template=appbuilder.base_template, appbuilder=appbuilder
-        ),
-        404,
-    )
+appbuilder.add_view(
+    CategoriaView,
+    "Modulo categorias",
+    icon = "fa-tags",
+    category = "Inventario"
+)
+
+appbuilder.add_view(
+    IngredienteView,
+    "Modulo Ingredientes",
+    icon = "fa-cubes",
+    category = "Inventario"
+)

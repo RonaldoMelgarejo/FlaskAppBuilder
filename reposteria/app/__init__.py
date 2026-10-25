@@ -11,7 +11,9 @@ def create_app() -> Flask:
         #from .models import Categoria, Producto
         #db.create_all()
         appbuilder.init_app(app, db.session)
-        #from . import views
+        from . import models
+        from .models import Categoria, Ingrediente
+        from . import views
     return app
 
-app = create_app
+app = create_app()
